@@ -20,7 +20,10 @@ class Category extends Model
         'meta_title', 
         'meta_description'
     ];
-
+             public function subcategories()
+    {
+        return $this->hasMany(Subcategory::class);
+    }
     // تفعيل الـ timestamps لتخزين التاريخ والوقت
     public $timestamps = true;
 }

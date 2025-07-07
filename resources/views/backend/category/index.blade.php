@@ -19,15 +19,28 @@
                         <th>Name</th>
                         <th>Slug</th>
                         <th>Description</th>
+                         <th>Active</th>
+                        <th>Sort Order</th>
+                        <th>Meta Title</th>
+                        <th>Meta Description</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
                         <th>Actions</th>
+                
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($categories as $category)
                         <tr>
-                            <td>{{ $category->name }}</td>
+                          <td>{{ $category->name }}</td>
                             <td>{{ $category->slug }}</td>
                             <td>{{ $category->description }}</td>
+                            <td>{{ $category->is_active ? 'Active' : 'Inactive' }}</td>
+                            <td>{{ $category->sort_order }}</td>
+                            <td>{{ $category->meta_title }}</td>
+                            <td>{{ $category->meta_description }}</td>
+                            <td>{{ $category->created_at->format('Y-m-d H:i:s') }}</td> <!-- تنسيق التاريخ -->
+                            <td>{{ $category->updated_at->format('Y-m-d H:i:s') }}</td> <!-- تنسيق التاريخ -->
                             <td>
                                 <a href="{{ route('backend.category.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                 <form action="{{ route('backend.category.destroy', $category->id) }}" method="POST" style="display:inline;">

@@ -18,6 +18,17 @@
 						<div class="parent-icon"><i class='bx bx-home-circle'></i>
 						</div>
 						<div class="menu-title">Dashboard</div>
+						 <li>
+                           <a href="{{ route('backend.category.index') }}" class="btn btn-primary" style="color: #fff;">Categories</a>
+                         </li>
+						 <li>
+                           <a href="{{ route('backend.subcategories.index') }}" class="btn btn-primary" style="color: #fff;">Subcategories</a>
+                         </li>
+						 <li>
+						   <a href="{{ route('backend.products.index') }}" class="btn btn-primary"  style="color: #fff;">Products</a>
+						 </li>
+
+
 					</a>
 					<ul>
 						<li> 
