@@ -11,8 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminController;
-
-
+use Laratrust\Middleware\Role;
 
 /*
 |----------------------------------------------------------------------
@@ -30,12 +29,9 @@ use App\Http\Controllers\AdminController;
 Route::get('/admin/login', [AdminLoginController::class, 'create'])->name('admin.login');
 Route::post('/admin/login', [AdminLoginController::class, 'store'])->name('admin.login.submit');
 
-// Protect Admin Routes with 'auth' and 'role:admin' middleware
-Route::middleware(['auth', 'role:admin'])->group(function () {
+ Route::middleware(['auth', 'role:admin'])->prefix('/admin')->group(function () {
     // Admin Dashboard Route
-    Route::get('
-#
-', [AdminController::class, 'index'])->name('backend.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('backend.dashboard');
 
     // Category Routes
     Route::get('/categories', action: [CategoryController::class, 'index'])->name('backend.category.index'); // عرض قائمة الفئات
@@ -76,13 +72,16 @@ Route::get('/', function () {
 // Authenticated Route (Dashboard)
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // Profile Routes (Requires Authentication)
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    
+    
 });
 
 
@@ -98,13 +97,15 @@ Route::get('/index', function () {
 
 
 
-Route::get('/products', [FrontendProductController::class, 'showAllProducts'])->name('products.all');
 
-Route::get('/product/{product}', [FrontendProductController::class, 'showProductDetails'])->name('product.details');
-
-Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('cart.add');
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+   Route::middleware(['auth'])->group(function () {
+     Route::get('/products', [FrontendProductController::class, 'showAllProducts'])->name('products.all');
+     Route::get('/product/{product}', [FrontendProductController::class, 'showProductDetails'])->name('product.details');
+     Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('cart.add');
+     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+     Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+     Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+});
+require __DIR__ . '/auth.php';

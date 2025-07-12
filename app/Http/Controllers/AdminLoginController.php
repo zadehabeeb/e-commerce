@@ -27,11 +27,11 @@ class AdminLoginController extends Controller
         ]);
 
         // Attempt to authenticate the admin
-        if (Auth::attempt($request->only('email', 'password'))) {
+       if (Auth::attempt($request->only('email', 'password'))) {
             // Check if the authenticated user has the 'admin' role
             if (Auth::user()->hasRole('admin')) {
                 // Redirect to the admin dashboard if the user is an admin
-                return redirect()->route('backend.dashboard');
+                return redirect()->route('backend.category.index');
             }
 
             // If the user is not an admin, log them out and show an error message
