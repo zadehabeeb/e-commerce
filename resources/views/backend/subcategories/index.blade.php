@@ -3,7 +3,10 @@
 @section('title', 'Subcategories')
 
 @section('content')
-    <div class="container mt-4">
+
+       {{ $dataTable->table() }}
+       
+    {{-- <div class="container mt-4">
         <h2>Subcategories List</h2>
 
         <div class="mb-3">
@@ -55,5 +58,10 @@
                 </tbody>
             </table>
         @endif
-    </div>
+    </div> --}}
 @endsection
+@push('script')
+{{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+{{-- <script src="{{asset('assets/js/backend/category.js')}}"></script> --}}
+@endpush
+

@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-
+       
+    protected $table = 'categories'; // تحديد
     // تحديد الأعمدة التي يمكن تعبئتها عبر الـ form
+    
     protected $fillable = [
         'name', 
         'slug', 

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-             $table->id(); // BIGINT UNSIGNED PRIMARY KEY, AUTO_INCREMENT
+            $table->id(); // BIGINT UNSIGNED PRIMARY KEY, AUTO_INCREMENT
             $table->string('name', 255); // VARCHAR(255) NOT NULL
             $table->string('slug', 255)->unique(); // VARCHAR(255) NOT NULL, UNIQUE
             $table->text('description')->nullable(); // TEXT NULLABLE

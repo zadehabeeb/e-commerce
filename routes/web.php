@@ -24,41 +24,32 @@ use Laratrust\Middleware\Role;
 |
 */
 
-
 // Admin Login Routes
-Route::get('/admin/login', [AdminLoginController::class, 'create'])->name('admin.login');
-Route::post('/admin/login', [AdminLoginController::class, 'store'])->name('admin.login.submit');
+Route::get('/admin/login', [AdminLoginController::class, 'create'])
+    ->name('admin.login');
+Route::post('/admin/login', [AdminLoginController::class, 'store'])
+    ->name('admin.login.submit');
 
- Route::middleware(['auth', 'role:admin'])->prefix('/admin')->group(function () {
-    // Admin Dashboard Route
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('backend.dashboard');
+// Group all admin routes under a single prefix and middleware
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin') // remove the extra /admin prefix from individual paths
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [AdminController::class, 'index'])
+            ->name('backend.dashboard');
 
-    // Category Routes
-    Route::get('/categories', action: [CategoryController::class, 'index'])->name('backend.category.index'); // عرض قائمة الفئات
-    Route::get('/categories/create', [CategoryController::class, 'create'])->name('backend.category.create'); // عرض نموذج إضافة فئة جديدة
-    Route::post('/categories', [CategoryController::class, 'store'])->name('backend.category.store'); // تخزين الفئة الجديدة
-    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('backend.category.edit'); // عرض نموذج تعديل فئة
-    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('backend.category.update'); // تحديث الفئة
-    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('backend.category.destroy'); // حذف الفئة
+        // Category Routes (resourceful)
+        Route::resource('categories', CategoryController::class)
+            ->names('backend.categories');
 
+        // Subcategory Routes (resourceful)
+        Route::resource('subcategories', SubcategoryController::class)
+            ->names('backend.subcategories');
 
-    // Subcategory Routes
-    Route::get('/subcategories', action: [SubcategoryController::class, 'index'])->name('backend.subcategories.index'); // عرض جميع الفئات الفرعية
-    Route::get('/subcategories/create', [SubcategoryController::class, 'create'])->name('backend.subcategories.create'); // عرض نموذج إضافة فئة فرعية جديدة
-    Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('backend.subcategories.store'); // تخزين الفئة الفرعية الجديدة
-    Route::get('/subcategories/{id}/edit', [SubcategoryController::class, 'edit'])->name('backend.subcategories.edit'); // عرض نموذج تعديل فئة فرعية
-    Route::put('/subcategories/{id}', [SubcategoryController::class, 'update'])->name('backend.subcategories.update'); // تحديث الفئة الفرعية
-    Route::delete('/subcategories/{id}', [SubcategoryController::class, 'destroy'])->name('backend.subcategories.destroy'); // حذف الفئة الفرعية
-
-
-    // Product Routes
-    Route::get('/product', action: [ProductController::class, 'index'])->name('backend.products.index'); // عرض جميع المنتجات
-    Route::get('/product/create', [ProductController::class, 'create'])->name('backend.products.create'); // عرض نموذج إضافة منتج جديد
-    Route::post('/products', [ProductController::class, 'store'])->name('backend.products.store'); // تخزين المنتج الجديد
-    Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('backend.products.edit'); // عرض نموذج تعديل منتج
-    Route::put('/products/{id}', [ProductController::class, 'update'])->name('backend.products.update'); // تحديث المنتج
-    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('backend.products.destroy'); // حذف المنتج
-});
+        // Product Routes (resourceful)
+        Route::resource('products', ProductController::class)
+            ->names('backend.products');
+    });
 
 
 
