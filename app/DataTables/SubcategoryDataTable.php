@@ -57,16 +57,15 @@ class SubcategoryDataTable extends DataTable
                     ->setTableId('subcategory-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    // ->dom('Bfrtip')
+                     ->dom('Bfrtip')
                     ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
+                         Button::make('excel')->className('btn btn-success me-1'),
+                        Button::make('csv')->className('btn btn-info me-1'),
+                        Button::make('pdf')->className('btn btn-danger me-1'),
+                        Button::make('print')->className('btn btn-warning me-1'),
+                       
                     ]);
     }
 
@@ -76,20 +75,20 @@ class SubcategoryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('slug'),
-            Column::make('category_id'),
-            Column::make('description'),
-            Column::make('is_active'),
-            Column::make('sort_order'),
-            Column::make('meta_title'),
-            Column::make('meta_description'),
+        Column::make('id'),
+        Column::make('name'),
+        Column::make('slug'),
+        Column::make('category_id'),
+        Column::make('description'),
+        Column::make('is_active'),
+        Column::make('sort_order'),
+        Column::make('meta_title'),
+        Column::make('meta_description'),
+        Column::computed('action')
+            ->exportable(true)
+            ->printable(true)
+            ->width(80)
+            ->addClass('text-center'),
           
         ];
     }

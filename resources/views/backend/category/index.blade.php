@@ -6,7 +6,36 @@
 
 
 
-      {{ $dataTable->table() }}
+    <div class="container mt-4">
+    <button type="button" class="btn btn-primary mb-3" id="createCategoryBtn">
+        Add New Category
+    </button>
+
+    {{ $dataTable->table() }}
+     </div>
+
+
+    <!-- Create Category Modal -->
+    @include('backend.category.modal')
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -81,5 +110,9 @@
 
 @push('script')
 {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-{{-- <script src="{{asset('assets/js/backend/category.js')}}"></script> --}}
+<script>
+    window.storeCategoryUrl = "{{ route('backend.category.store') }}";
+    window.deleteCategoryBaseUrl = "{{ url('backend.category') }}";
+</script>
+<script src="{{ asset('assets/category.js') }}"></script>
 @endpush

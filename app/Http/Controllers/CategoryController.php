@@ -13,8 +13,48 @@ class CategoryController extends Controller
     {
         return $datatable->render('backend.category.index');
     }
-   
 
+    // عرض نموذج إضافة فئة جديدة (Create)
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name'             => 'required|string|max:255',
+            'slug'             => 'required|string|max:255|unique:categories',
+            'description'      => 'nullable|string',
+            'image'            => 'nullable|image',
+            'is_active'        => 'nullable|boolean',
+            'sort_order'       => 'nullable|integer',
+            'meta_title'       => 'nullable|string',
+            'meta_description' => 'nullable|string',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('categories');
+        }
+        $data['is_active'] = $request->has('is_active');
+
+        $category = Category::create($data);
+
+        return response()->json([
+            'success'  => true,
+            'category' => $category,
+
+        ]);
+        
+ }
+    //  delete category
+     public function destroy(Category $category)
+{
+    $category->delete();
+    return response()->json([
+        'success' => true,
+    ]);
+}
+
+
+
+    
 
     // عرض الفئات (Read)
     // public function index()
