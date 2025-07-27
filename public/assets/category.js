@@ -12,6 +12,9 @@ $(function () {
 
         $.ajax({
             url: `/admin/categories`,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             method: 'POST',
             data: formData,
             processData: false,
@@ -39,7 +42,11 @@ $(function () {
         const categoryId = btn.data('id')
 
         $.ajax({
+            
             url: `/admin/categories/${categoryId}/edit`,
+            headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
             method: 'GET',
             success: function (res) {
 
@@ -66,6 +73,9 @@ $(function () {
 
         $.ajax({
             url: `/admin/categories/${categoryId}`,
+            headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
             method: 'POST',
             data: formData,
             processData: false,
@@ -98,6 +108,9 @@ $(function () {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: `/admin/categories/${btn.data('id')}`,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                         method: 'DELETE',
                         success: function (res) {
                             showSuccessAlert(res)

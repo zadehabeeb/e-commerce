@@ -1,19 +1,19 @@
-<!-- Create Category Modal -->
-<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- edit category modal --}}
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 50%;">
         <div class="modal-content" style="width:50rem">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create Category Form</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Update Product Form</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-9 mx-auto" style="width: 100%">
-
                         <div class="card">
                             <div class="card-body">
-                                <form id="createCategoryForm" method="POST">
-                                    @CSRF
+                                <form id="editCategoryForm" method="POST">
+                                    @csrf
+                                    @method('PUT')
 
                                     <div class="card-body">
                                         <label style="color: rgb(0, 60, 255) ; margin-bottom:5px">Category Name
@@ -24,10 +24,6 @@
                                         <label style="color: rgb(0, 60, 255) ; margin-bottom:5px">Slug</label>
 
                                         <input class="form-control mb-3" type="text" name="slug">
-
-                                        <label style="color: rgb(0, 60, 255) ; margin-bottom:5px">Description</label>
-
-                                        <textarea class="form-control mb-3" type="text" name="description" rows="5" cols="50"></textarea>
 
 
                                         <label style="color: rgb(0, 60, 255) ; margin-bottom:5px">Image</label>
@@ -44,28 +40,21 @@
 
                                         <textarea class="form-control mb-3" type="text" name="meta_description" rows="5" cols="50"></textarea>
 
+                                       
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <button id="store-category-btn" type="button" class="btn btn-primary">Save
+                                            <button id="update-category-btn" type="button" class="btn btn-primary">Save
                                                 changes</button>
                                         </div>
                                     </div>
+
                                 </form>
                             </div>
                         </div>
                     </div>
-
-
-
-
-
                 </div>
             </div>
         </div>
     </div>
-
-<!-- end of create modal -->
-        </div>      {{-- close .modal-content --}}
-      </div>        {{-- close .modal-dialog --}}
-    </div>          {{-- close .modal (createCategoryModal) --}}
+</div>

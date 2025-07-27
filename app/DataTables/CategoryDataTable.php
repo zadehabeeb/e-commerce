@@ -28,7 +28,7 @@ class CategoryDataTable extends DataTable
             ->editColumn('is_active', function ($product) {
                 return $product->is_active ? 'Yes' : 'No';
             })
-          
+            ->rawColumns(['action', 'name'])
             ->setRowId('id');
     }
 

@@ -34,8 +34,10 @@
     </div>
 
 
-    {{--  Modal --}}
+    {{--   create Modal --}}
     @include('backend.category.modal')
+    {{--   edit Modal --}}
+    @include('backend.category.editmodal')
 
    
 
