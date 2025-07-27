@@ -42,6 +42,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('categories', CategoryController::class)
             ->names('backend.categories');
 
+            
+
         // Subcategory Routes (resourceful)
         Route::resource('subcategories', SubcategoryController::class)
             ->names('backend.subcategories');

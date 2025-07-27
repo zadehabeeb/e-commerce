@@ -1,11 +1,13 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\DataTables\CategoryDataTable;
-
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\Category\StoreCategoryRequest;
+use App\Http\Requests\Backend\Category\UpdateCategoryRequest;
+use App\Http\Resources\Backend\CategoryResource;
+use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {  
@@ -16,41 +18,105 @@ class CategoryController extends Controller
 
     // عرض نموذج إضافة فئة جديدة (Create)
 
-    public function store(Request $request)
+ public function create()
     {
-        $data = $request->validate([
-            'name'             => 'required|string|max:255',
-            'slug'             => 'required|string|max:255|unique:categories',
-            'description'      => 'nullable|string',
-            'image'            => 'nullable|image',
-            'is_active'        => 'nullable|boolean',
-            'sort_order'       => 'nullable|integer',
-            'meta_title'       => 'nullable|string',
-            'meta_description' => 'nullable|string',
-        ]);
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories');
+        try {
+            return response()->json([], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'title' => 'Failed!',
+                'message' => 'An error occurred .',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-        $data['is_active'] = $request->has('is_active');
+    }
 
-        $category = Category::create($data);
+    public function store(StoreCategoryRequest $request)
+    {
+        DB::beginTransaction();
 
-        return response()->json([
-            'success'  => true,
-            'category' => $category,
+        try {
+            $validatedData = $request->validated();
+            Category::create($validatedData);
+            DB::commit();
 
-        ]);
-        
- }
-    //  delete category
-     public function destroy(Category $category)
-{
-    $category->delete();
-    return response()->json([
-        'success' => true,
-    ]);
-}
+            return response()->json([
+                'success' => true,
+                'title' => 'Created!',
+                'message' => 'category created successfully',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'title' => 'Created Failed!',
+                'message' => 'Something went wrong while creating the category: ',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    // عرض نموذج تعديل فئة (Edit)
+        public function edit(Category $category)
+    {
+        try {
+            return response()->json([
+                'category' => new CategoryResource($category),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'title' => 'Fetch Category Failed!',
+                'message' => 'An error occurred while fetching the category data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    // تحديث الفئة (Update)
+    public function update(UpdateCategoryRequest $request, Category $category)
+    {
+        DB::beginTransaction();
+
+        try {
+            $validatedData = $request->validated();
+            $category->update($validatedData);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Updated!',
+                'message' => 'category updated successfully',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'title' => 'Update Failed',
+                'message' => 'Something went wrong while updating the category',
+                'error' => $e->getMessage()
+
+            ], 500);
+        }
+    }
+
+
+ //  delete category
+    public function destroy(Category $category)
+    {
+        try {
+            $category->delete();
+            return response()->json([
+                'success' => true,
+                'title' => 'Deleted!',
+                'message' => 'Category has been deleted successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'title' => 'Delete Failed',
+                'message' => 'Something went wrong while deleting the category',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
 
 

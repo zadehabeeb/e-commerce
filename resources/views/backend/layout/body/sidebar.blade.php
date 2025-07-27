@@ -19,7 +19,7 @@
 						</div>
 						<div class="menu-title">Dashboard</div>
 						 <li>
-                           <a href="{{ route('backend.category.index') }}" class="btn btn-primary" style="color: #fff;">Categories</a>
+                           <a href="{{ route('backend.categories.index') }}" class="btn btn-primary" style="color: #fff;">Categories</a>
                          </li>
 						 <li>
                            <a href="{{ route('backend.subcategories.index') }}" class="btn btn-primary" style="color: #fff;">Subcategories</a>

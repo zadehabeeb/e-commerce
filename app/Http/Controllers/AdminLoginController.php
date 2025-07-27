@@ -31,7 +31,7 @@ class AdminLoginController extends Controller
             // Check if the authenticated user has the 'admin' role
             if (Auth::user()->hasRole('admin')) {
                 // Redirect to the admin dashboard if the user is an admin
-                return redirect()->route('backend.category.index');
+                return redirect()->route('backend.categories.index');
             }
 
             // If the user is not an admin, log them out and show an error message
