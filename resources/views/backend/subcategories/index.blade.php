@@ -1,67 +1,49 @@
 @extends('backend.layout.master')
 
-@section('title', 'Subcategories')
-
-@section('content')
-
-       {{ $dataTable->table() }}
-       
-    {{-- <div class="container mt-4">
-        <h2>Subcategories List</h2>
-
-        <div class="mb-3">
-            <a href="{{ route('backend.subcategories.create') }}" class="btn btn-primary">Add New Subcategory</a>
-        </div>
-
-        @if($subcategories->isEmpty())
-            <p>No subcategories found.</p>
-        @else
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Slug</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Active</th>
-                        <th>Sort Order</th>
-                        <th>Meta Title</th>
-                        <th>Meta Description</th>
-                        <th>Created At</th>
-                        <th>Updated At</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($subcategories as $subcategory)
-                        <tr>
-                            <td>{{ $subcategory->name }}</td>
-                            <td>{{ $subcategory->slug }}</td>
-                            <td>{{ $subcategory->description }}</td>
-                            <td>{{ $subcategory->category->name }}</td> <!-- عرض اسم الفئة الرئيسية -->
-                            <td>{{ $subcategory->is_active ? 'Active' : 'Inactive' }}</td> <!-- عرض حالة الفئة -->
-                            <td>{{ $subcategory->sort_order }}</td> <!-- عرض ترتيب العرض -->
-                            <td>{{ $subcategory->meta_title }}</td> <!-- عرض Meta Title -->
-                            <td>{{ $subcategory->meta_description }}</td> <!-- عرض Meta Description -->
-                            <td>{{ $subcategory->created_at->format('Y-m-d H:i:s') }}</td> <!-- عرض تاريخ الإنشاء -->
-                            <td>{{ $subcategory->updated_at->format('Y-m-d H:i:s') }}</td> <!-- عرض تاريخ التحديث -->
-                            <td>
-                                <a href="{{ route('backend.subcategories.edit', $subcategory->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('backend.subcategories.destroy', $subcategory->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this subcategory?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endif
-    </div> --}}
-@endsection
-@push('script')
-{{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-{{-- <script src="{{asset('assets/js/backend/category.js')}}"></script> --}}
+@push('css')
 @endpush
 
+
+@section('content')
+    <div class="page-wrapper">
+        <div class="page-content">
+            <div class="card radius-10">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+
+                        <div>
+                            <h5 class="mb-0">Categories Overview</h5>
+                        </div>
+
+                        <div class="font-22 ms-auto">
+                            <button type="button" class="btn btn-warning text-white create-subcategory-btn"
+                                data-bs-toggle="modal" data-bs-target="#createSubcategoryModal">
+                                <i class="bx bx-layer-plus"></i> insert
+                            </button>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div class="table-responsive" style="max-height: calc(100vh - 14.5rem); overflow-y: auto;">
+                        {{ $dataTable->table() }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{--   create Modal --}}
+    @include('backend.subcategories.partials.createmodal')
+    {{--   edit Modal --}}
+    @include('backend.subcategories.partials.editmodal')
+
+    
+@endsection
+
+
+@push('script')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script src="{{ asset('assets/subcategory.js') }}"></script>
+@endpush

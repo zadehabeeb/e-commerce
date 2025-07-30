@@ -2,112 +2,150 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subcategory;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\DataTables\SubcategoryDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\Subcategory\StoreSubcategoryRequest;
+use App\Http\Requests\Backend\Subcategory\UpdateSubcategoryRequest;
+use App\Http\Resources\Backend\CategoryResource;
+use App\Http\Resources\Backend\SubcategoryResource;
+use App\Models\Category;
+use App\Models\Subcategory;
+use Illuminate\Support\Facades\DB;
 
 class SubcategoryController extends Controller
 {
-
-
-      public function index(SubcategoryDataTable $datatable)
+    public function index(SubcategoryDataTable $datatable)
     {
-        return $datatable->render('backend.subcategories.index');
+        $subcategories = Subcategory::latest()->get();
+        $categories = Category::latest()->get();
+        return $datatable->render('backend.subcategories.index', compact('subcategories','categories'));
     }
-   
-    // // عرض جميع الفئات الفرعية
-    // public function index()
-    // {
-    //     $subcategories = Subcategory::all(); // جلب جميع الفئات الفرعية
-    //     return view('backend.subcategories.index', compact('subcategories')); // عرض الفئات الفرعية
-    // }
 
-    // // عرض نموذج إضافة فئة فرعية جديدة
-    // public function create()
-    // {
-    //     $categories = Category::all(); // جلب جميع الفئات الرئيسية
-    //     return view('backend.subcategories.create', compact('categories')); // عرض نموذج إضافة الفئة الفرعية
-    // }
 
-    // // تخزين الفئة الفرعية الجديدة
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|unique:subcategories',
-    //         'slug' => 'required|unique:subcategories',
-    //         'category_id' => 'required|exists:categories,id',
-    //         'description' => 'nullable',
-    //         'image' => 'nullable|image',
-    //         'is_active' => 'nullable|boolean',
-    //         'sort_order' => 'nullable|integer',
-    //         'meta_title' => 'nullable|string',
-    //         'meta_description' => 'nullable|string',
-    //     ]);
+    public function create()
+    {
+        try {
+            $categories = Category::all();
+            return response()->json([
+                'categories' => CategoryResource::collection($categories),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'title' => 'Fetch subcategory Failed!',
+                'message' => 'An error occurred while fetching the subcategory data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
-    //     // إضافة الفئة الفرعية إلى قاعدة البيانات
-    //     Subcategory::create([
-    //         'name' => $request->name,
-    //         'slug' => $request->slug,
-    //         'category_id' => $request->category_id,
-    //         'description' => $request->description,
-    //         'image' => $request->image ? $request->image->store('subcategories') : null,
-    //         'is_active' => $request->is_active ?? false,
-    //         'sort_order' => $request->sort_order ?? 0,
-    //         'meta_title' => $request->meta_title,
-    //         'meta_description' => $request->meta_description,
-    //     ]);
+    public function store(StoreSubcategoryRequest $request)
+    {
+        DB::beginTransaction();
 
-    //     return redirect()->route('backend.subcategories.index'); // إعادة التوجيه بعد الحفظ
-    // }
+        try {
+            $validatedData = $request->validated();
+            Subcategory::create($validatedData);
+            DB::commit();
 
-    // // عرض نموذج تعديل فئة فرعية
-    // public function edit($id)
-    // {
-    //     $subcategory = Subcategory::findOrFail($id); // العثور على الفئة الفرعية باستخدام المعرف
-    //     $categories = Category::all(); // جلب جميع الفئات الرئيسية
-    //     return view('backend.subcategories.edit', compact('subcategory', 'categories')); // عرض النموذج مع البيانات
-    // }
+            return response()->json([
+                'success' => true,
+                'title' => 'Created!',
+                'message' => 'subcategory created successfully',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'title' => 'Created Failed!',
+                'message' => 'Something went wrong while creating the subcategory: ',
+                'error' => $e->getMessage()
 
-    // // تحديث الفئة الفرعية
-    // public function update(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|unique:subcategories,name,' . $id,
-    //         'slug' => 'required|unique:subcategories,slug,' . $id,
-    //         'category_id' => 'required|exists:categories,id',
-    //         'description' => 'nullable',
-    //         'image' => 'nullable|image',
-    //         'is_active' => 'nullable|boolean',
-    //         'sort_order' => 'nullable|integer',
-    //         'meta_title' => 'nullable|string',
-    //         'meta_description' => 'nullable|string',
-    //     ]);
+            ], 500);
+        }
+    }
 
-    //     $subcategory = Subcategory::findOrFail($id); // العثور على الفئة الفرعية باستخدام المعرف
+//edit subcategory
+public function show($id)
+{
+    try {
+        $subcategory = Subcategory::findOrFail($id);
 
-    //     // تحديث بيانات الفئة الفرعية
-    //     $subcategory->update([
-    //         'name' => $request->name,
-    //         'slug' => $request->slug,
-    //         'category_id' => $request->category_id,
-    //         'description' => $request->description,
-    //         'image' => $request->image ? $request->image->store('subcategories') : $subcategory->image,
-    //         'is_active' => $request->is_active ?? $subcategory->is_active,
-    //         'sort_order' => $request->sort_order ?? $subcategory->sort_order,
-    //         'meta_title' => $request->meta_title,
-    //         'meta_description' => $request->meta_description,
-    //     ]);
+        return response()->json([
+            'subcategory' => new SubcategoryResource($subcategory),
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'title' => 'Fetch subcategory Failed!',
+            'message' => 'An error occurred while fetching the subcategory data.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 
-    //     return redirect()->route('backend.subcategories.index'); // إعادة التوجيه بعد التحديث
-    // }
 
-    // // حذف الفئة الفرعية
-    // public function destroy($id)
-    // {
-    //     $subcategory = Subcategory::findOrFail($id); // العثور على الفئة الفرعية باستخدام المعرف
-    //     $subcategory->delete(); // حذف الفئة الفرعية من قاعدة البيانات
+    public function edit(Subcategory $subcategory)
+    {
+        try {
+            $categories = Category::latest()->get();
+            return response()->json([
+                'subcategory' => new SubcategoryResource($subcategory),
+                'categories' => CategoryResource::collection($categories),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'title' => 'Fetch subcategory Failed!',
+                'message' => 'An error occurred while fetching the subcategory data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
-    //     return redirect()->route('backend.subcategories.index'); // إعادة التوجيه بعد الحذف
-    // }
+
+
+    public function update(UpdateSubcategoryRequest $request, Subcategory $subcategory)
+    {
+        DB::beginTransaction();
+
+        try {
+            $validatedData = $request->validated();
+            $subcategory->update($validatedData);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'title' => 'Updated!',
+                'message' => 'subcategory updated successfully',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'title' => 'Update Failed',
+                'message' => 'Something went wrong while updating the subcategory',
+                'error' => $e->getMessage()
+
+            ], 500);
+        }
+    }
+
+
+
+    public function destroy(Subcategory $subcategory)
+    {
+        try {
+            $subcategory->delete();
+            return response()->json([
+                'success' => true,
+                'title' => 'Deleted!',
+                'message' => 'subcategory has been deleted successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'title' => 'Delete Failed',
+                'message' => 'Something went wrong while deleting the subcategory',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -12,7 +12,7 @@
                     <div class="d-flex align-items-center">
 
                         <div>
-                            <h2 class="mb-0">Categories </h2>
+                            <h5 class="mb-0">Categories Overview</h5>
                         </div>
 
                         <div class="font-22 ms-auto">
