@@ -27,6 +27,9 @@
 						 <li>
 						   <a href="{{ route('backend.products.index') }}" class="btn btn-primary"  style="color: #fff;">Products</a>
 						 </li>
+						 <li>
+						   <a href="{{ route('backend.users.index') }}" class="btn btn-primary"  style="color: #fff;">Users</a>
+						 </li>
 
 
 					</a>

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
+
 //frontend
 use App\Http\Controllers\FrontendProductController;
 use App\Http\Controllers\CartController;
@@ -51,6 +53,12 @@ Route::middleware(['auth', 'role:admin'])
         // Product Routes (resourceful)
         Route::resource('products', ProductController::class)
             ->names('backend.products');
+
+        // User Routes (resourceful)
+        Route::resource('users', UserController::class)
+            ->names('backend.users');
+
+            
     });
 
 
