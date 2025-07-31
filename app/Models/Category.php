@@ -26,6 +26,11 @@ class Category extends Model
     {
         return $this->hasMany(Subcategory::class);
     }
+    // products
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
     // تفعيل الـ timestamps لتخزين التاريخ والوقت
     public $timestamps = true;
 }

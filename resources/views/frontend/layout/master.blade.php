@@ -174,6 +174,39 @@
     <!-- Template  JS -->
     <script src="/frontend/assets/js/main.js?v=5.3"></script>
     <script src="/frontend/assets/js/shop.js?v=5.3"></script>
+    {{-- Include SweetAlert2 CDN --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+            toast: true,
+            position: 'top-end',
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '{{ session('error') }}',
+            toast: true,
+            position: 'top-end',
+            timer: 5000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+        });
+    </script>
+@endif
+
 </body>
 
 </html>
