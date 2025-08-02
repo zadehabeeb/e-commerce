@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name', 255); // VARCHAR(255) NOT NULL
             $table->string('slug', 255)->unique(); // VARCHAR(255) NOT NULL, UNIQUE
             $table->text('description')->nullable(); // LONGTEXT NULLABLE
-            $table->text('short_description')->nullable(); // TEXT NULLABLE
+            $table->string('short_description', 500)->nullable(); // VARCHAR(500) NULLABLE
             $table->string('sku', 100)->unique(); // VARCHAR(100) NOT NULL, UNIQUE
             $table->decimal('price', 10, 2); // DECIMAL(10,2) NOT NULL
             $table->decimal('sale_price', 10, 2)->nullable(); // DECIMAL(10,2) NULLABLE
@@ -38,6 +38,13 @@ return new class extends Migration
             $table->decimal('rating_average', 2, 1)->default(0.0); // DECIMAL(2,1) DEFAULT 0.0
             $table->integer('rating_count')->default(0); // INTEGER DEFAULT 0
             $table->timestamps(); // created_at and updated_at timestamps
+
+             // Index frequently queried columns.
+            $table->index(['category_id', 'subcategory_id']); // Composite index for category and subcategory.
+            $table->index('is_active');
+            $table->index('stock_status');
+            $table->index('price');
+            $table->index('created_at');
         });
     }
 

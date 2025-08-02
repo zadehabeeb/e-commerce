@@ -58,6 +58,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('users', UserController::class)
             ->names('backend.users');
 
+        Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');    
+
             
     });
 

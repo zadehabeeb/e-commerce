@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id(); // BIGINT UNSIGNED PRIMARY KEY, AUTO_INCREMENT
-            $table->string('name', 255); // VARCHAR(255) NOT NULL
+            $table->string('name', 255)->unique(); // VARCHAR(255) NOT NULL
             $table->string('slug', 255)->unique(); // VARCHAR(255) NOT NULL, UNIQUE
             $table->text('description')->nullable(); // TEXT NULLABLE
             $table->string('image', 255)->nullable(); // VARCHAR(255) NULLABLE
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('meta_title', 255)->nullable(); // VARCHAR(255) NULLABLE
             $table->text('meta_description')->nullable(); // TEXT NULLABLE
             $table->timestamps(); // created_at and updated_at timestamps
+            $table->index('slug');
+            $table->index('is_active');
         });
     }
 
