@@ -25,9 +25,24 @@ class Order extends Model
         'delivered_at',
     ];
     protected $casts = [
-        'shipped_at' => 'datetime',
-        'delivered_at' => 'datetime',
+        'total_amount'   => 'decimal:2',
+        'tax_amount'     => 'decimal:2',
+        'shipping_amount'=> 'decimal:2',
+        'discount_amount'=> 'decimal:2',
+        'status'         => 'string',
+        'payment_status' => 'string',
     ];
+      /**
+     * Generate a unique order number before the order is created.
+     */
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+            if (empty($order->order_number)) {
+                $order->order_number = strtoupper(uniqid('ORD-'));  // Generate order number
+            }
+        });
+    }
 
     public function user()
     {

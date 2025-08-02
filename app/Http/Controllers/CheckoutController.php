@@ -12,11 +12,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
+
 class CheckoutController extends Controller
 {
     public function index()
     {
-        return view('frontend.checkout');
+       $user = Auth::user();
+    $cartItems = ShoppingCart::where('user_id', $user->id)->with('product')->get();
+    
+    return view('frontend.checkout', compact('cartItems'));
     }
 
     public function store(Request $request)
@@ -59,12 +63,12 @@ class CheckoutController extends Controller
 
             // Create order
             $order = Order::create([
-                // 'user_id'          => $user->id,
-                // 'order_number'     => $orderNumber,
+                'user_id'          => $user->id,
+                'order_number'     => $orderNumber,
                 'total_amount'     => $total,
-                'status'           => 'paid',
+                'status'           => 'pending',
                 'payment_status'   => 'paid',
-                // 'payment_method'   => $validated['payment_method'],
+                'payment_method'   => $validated['payment_method'],
                 'shipping_address' => $validated['shipping_address'],
                 'transaction_id'   => Str::uuid(),
             ]);
@@ -75,7 +79,7 @@ class CheckoutController extends Controller
                 $currentPrice = $product->sale_price ?? $product->price;
                 $quantity     = $item->quantity;
                 OrderItem::create([
-                    // 'order_id'     => $order->id,
+                    'order_id'     => $order->id,
                     'product_id'   => $product->id,
                     'product_name' => $product->name,
                     'product_sku'  => $product->sku,

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
+
 class Product extends Model
 {
     use HasFactory;
@@ -36,19 +37,6 @@ class Product extends Model
         'cost_price',       
     ];
 
-    protected $casts = [
-        'is_active'      => 'boolean',
-        'manage_stock'   => 'boolean',
-        'is_featured'    => 'boolean',
-        'gallery'        => 'array',
-        'stock_quantity' => 'integer',
-        'min_quantity'   => 'integer',
-        'price'          => 'decimal:2',
-        'sale_price'     => 'decimal:2',
-        'cost_price'     => 'decimal:2',
-        'dimensions'     => 'array',      // new cast
-        'weight'         => 'decimal:2',  // new cast
-    ];
     public function getFormattedPriceAttribute(): string
     {
         return number_format($this->price ?? 0, 2);
@@ -122,6 +110,10 @@ class Product extends Model
     { 
     return $this->hasMany(OrderItem::class); 
     } 
+    public function shoppingCart()
+    {
+        return $this->hasMany(ShoppingCart::class);
+    }
     
 
 

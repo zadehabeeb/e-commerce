@@ -180,8 +180,10 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
 
+
     public function index(ProductDataTable $datatable)
     {
+        
         $categories = Category::all();
 
         return $datatable->render('backend.products.index', compact('categories'));
