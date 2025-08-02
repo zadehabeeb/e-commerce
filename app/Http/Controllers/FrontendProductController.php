@@ -6,7 +6,8 @@ use App\Models\Product;
 
 
 class FrontendProductController extends Controller
-{
+{    
+    
     public function showAllProducts()
     {
         // Fetch all products from the database

@@ -94,7 +94,7 @@ class CheckoutController extends Controller
             ShoppingCart::where('user_id', $user->id)->delete();
             Session::forget('cart');
 
-            return redirect('/index')->with('success', 'Order placed successfully.');
+            return redirect('/products')->with('success', 'Order placed successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Checkout failed. '.$e->getMessage());
